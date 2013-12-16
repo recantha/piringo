@@ -13,4 +13,4 @@ sudo python server.py
 
 This runs a web server on port 8080 (you can change that in server.py).
 
-Then, call http://<server>:8080/circuit.py
+Then, call http://server:8080/circuit.py
