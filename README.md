@@ -4,6 +4,7 @@ The PiRingo is an add-on board created by 4tronix.
 Documentation and build instructions for the board can be found at:
 http://4tronix.co.uk/piringo
 
+<img src="http://4tronix.co.uk/blog/wp-content/uploads/2013/12/step05.jpg" width="300">
 
 The scripts here are to create an internet-of-things interface to control the PiRingo.
 
