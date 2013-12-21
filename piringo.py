@@ -1,46 +1,119 @@
 import RPi.GPIO as GPIO
 import time
+import sys
+import random
 
-ALL_LEDS=[]
+PIN_LEDS=[]
 
-def piringoSetup():
-        GPIO.setmode(GPIO.BOARD)
-        GPIO.setwarnings(False)
+def setup():
+	GPIO.setmode(GPIO.BOARD)
+	GPIO.setwarnings(False)
 
-        PIN_LED1=7
-        PIN_LED2=11
-        PIN_LED3=12
-        PIN_LED4=13
-        PIN_LED5=15
-        PIN_LED6=16
-        PIN_LED7=18
-        PIN_LED8=22
-        PIN_LED9=24
-        PIN_LED10=26
-        PIN_LED11=8
-        PIN_LED12=10
+	global PIN_LEDS
+	PIN_LEDS=[0,7,11,12,13,15,16,18,22,24,26,8,10]
+	turnOffAll()
+	
+def turnOn(PIN):
+	GPIO.output(PIN, False)
 
-        global ALL_LEDS
-        ALL_LEDS=[PIN_LED1,PIN_LED2,PIN_LED3,PIN_LED4,PIN_LED5,PIN_LED6,PIN_LED7,PIN_LED8,PIN_LED9,PIN_LED10,PIN_LED11,PIN_LED12]
+def turnOff(PIN):
+	GPIO.output(PIN, True)
 
-        for PIN_LED in ALL_LEDS:
-                GPIO.setup(PIN_LED, GPIO.OUT)
-                piringoTurnOff(PIN_LED)
+def turnOffAll():
+	for PIN_LED in PIN_LEDS:
+		if PIN_LED != 0:
+			GPIO.setup(PIN_LED, GPIO.OUT)
+			turnOff(PIN_LED)
 
-def piringoTurnOn(PIN):
-        GPIO.output(PIN, False)
+def circuit(pause):
+	for PIN_LED in PIN_LEDS:
+		if PIN_LED != 0:
+			turnOn(PIN_LED)
+			time.sleep(pause)
+			turnOff(PIN_LED)
 
-def piringoTurnOff(PIN):
-        GPIO.output(PIN, True)
+def stars(pause):
+	turnOn(PIN_LEDS[1])
+	turnOn(PIN_LEDS[7])
+	turnOn(PIN_LEDS[4])
+	turnOn(PIN_LEDS[10])
+	time.sleep(pause)
+	turnOffAll()
+	turnOn(PIN_LEDS[2])
+	turnOn(PIN_LEDS[8])
+	turnOn(PIN_LEDS[5])
+	turnOn(PIN_LEDS[11])
+	time.sleep(pause)
+	turnOffAll()
+	turnOn(PIN_LEDS[3])
+	turnOn(PIN_LEDS[9])
+	turnOn(PIN_LEDS[6])
+	turnOn(PIN_LEDS[12])
+	time.sleep(pause)
+	turnOffAll()
 
-def piringoFullCircuit():
-        for PIN_LED in ALL_LEDS:
-                piringoTurnOn(PIN_LED)
-                time.sleep(0.2)
-                piringoTurnOff(PIN_LED)
+def randomOne(pause):
+	pin = random.choice(PIN_LEDS)
+	if pin != 0:
+		turnOn(pin)
+		time.sleep(pause)
+		turnOff(pin)
+
+def randomPins(count, pause):
+	pins = []
+	for i in range(count):
+		pin = random.choice(PIN_LEDS)
+		pins.append(pin)
+
+	for pin in pins:
+		if pin != 0:
+			turnOn(pin)
+	time.sleep(pause)
+	for pin in pins:
+		if pin != 0:
+			turnOff(pin)
+
+def sequenceOne():
+	circuit(0.05)
+	for i in range(3):
+		randomPins(2, 0.1)
+	circuit(0.05)
+	for i in range(4):
+		randomPins(3, 0.2)
+	for i in range(3):
+		stars(0.1)
+	for i in range(4):
+		randomPins(4, 0.2)
+	circuit(0.06)
+	for i in range(2):
+		stars(0.05)
 
 if __name__ == '__main__':
-        piringoSetup()
-        while True:
-                piringoFullCircuit()
+	setup()
+	while True:
+		if sys.argv[1] == 'slowcircuit':
+			circuit(0.2)
 
+		elif sys.argv[1] == 'fastcircuit':
+			circuit(0.05)
+
+		elif sys.argv[1] == 'superfastcircuit':
+			circuit(0.01)
+
+		elif sys.argv[1] == 'stars':
+			stars(0.2)
+
+		elif sys.argv[1] == 'randomone':
+			randomPins(1, 0.2)
+
+		elif sys.argv[1] == 'randomtwo':
+			randomPins(2, 0.2)
+
+		elif sys.argv[1] == 'randomthree':
+			randomPins(3, 0.2)
+
+		elif sys.argv[1] == 'sequenceone':
+			sequenceOne()
+
+		else:
+			print "No operation"
