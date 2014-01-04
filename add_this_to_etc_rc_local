@@ -1,0 +1,4 @@
+# This must go in /etc/rc.local and not as a /etc/init.d service. It seems the picam is not ready before then
+cd /home/pi/piringo
+sudo /home/pi/piringo/start_stream.sh
+

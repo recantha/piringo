@@ -67,6 +67,16 @@ class MyHandler(BaseHTTPRequestHandler):
 				piringo.sequenceOne()
 				return
 
+			if self.path.endswith("sequencetwo"):
+				self.wfile.write("Sequence two")
+				piringo.sequenceTwo()
+				return
+
+			if self.path.endswith("sequencethree"):
+				self.wfile.write("Sequence three")
+				piringo.sequenceThree()
+				return
+
 			return
 
 		except IOError:
